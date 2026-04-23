@@ -1,0 +1,74 @@
+{
+  "Anahtar Kelime": {
+    "Genel Veritabanı Taraması": [
+      "intext:\"{{target}}\" ext:sql \"pwd\"",
+      "intitle:\"index of\" \"{{target}}\" database"
+    ],
+    "Genel Şifre ve Token Taraması": [
+      "intext:\"{{target}}\" AND intext:\"password\" ext:env",
+      "intext:\"{{target}}\" AND intext:\"api_key\" ext:log"
+    ],
+    "Gizli Belge Taraması": [
+      "intitle:\"{{target}}\" (filetype:pdf OR filetype:xlsx) \"confidential\"",
+      "inurl:\"{{target}}\" filetype:doc \"internal use only\""
+    ]
+  },
+  "Domain": {
+    "API Anahtarı (Key) Sızıntıları": [
+      "filetype:env \"DB_PASSWORD\" site:{{target}}",
+      "intext:\"api_key\" filetype:env site:{{target}}",
+      "intext:\"AWS_ACCESS_KEY_ID\" filetype:env site:{{target}}"
+    ],
+    "Açık Git Repoları": [
+      "inurl:\".git\" site:{{target}}",
+      "inurl:\"/.git/config\" site:{{target}}",
+      "intitle:\"index of\" \".git\" site:{{target}}"
+    ],
+    "Açığa Çıkmış Dosyalar (Exposed Files)": [
+      "intitle:\"index of\" site:{{target}}",
+      "filetype:log inurl:log site:{{target}}",
+      "filetype:sql inurl:sql site:{{target}}",
+      "filetype:env inurl:.env site:{{target}}",
+      "filetype:pdf site:{{target}}"
+    ],
+    "Config Files": [
+      "intitle:pass site:{{target}}"
+    ],
+    "E-posta Sızıntıları": [
+      "intext:\"email\" site:{{target}}",
+      "inurl:\"contact\" intext:\"@{{target}}\" -www.{{target}}",
+      "filetype:xls inurl:\"email\" site:{{target}}"
+    ],
+    "Hassas Dizinler (Sensitive Directories)": null,
+    "Kullanıcı Adı ve Şifreler": [
+      "intext:\"password\" filetype:log site:{{target}}",
+      "intext:\"username\" filetype:log site:{{target}}",
+      "filetype:sql \"password\" site:{{target}}"
+    ],
+    "Sık Kullanılan Zafiyetli Yollar": [
+      "inurl:/admin site:{{target}}",
+      "inurl:/backup site:{{target}}",
+      "inurl:wp- site:{{target}}"
+    ],
+    "Varsayılan / Zafiyetli Web Sunucuları": [
+      "intitle:\"Apache2 Ubuntu Default Page: It works\" site:{{target}}",
+      "intitle:\"Index of /\" \"Apache Server\" site:{{target}}",
+      "intitle:\"Welcome to nginx\" site:{{target}}"
+    ],
+    "Veritabanı Dosyaları": [
+      "filetype:sql inurl:db site:{{target}}",
+      "filetype:sql inurl:dump site:{{target}}",
+      "filetype:bak inurl:db site:{{target}}"
+    ],
+    "Yapılandırma (Config) Dosyaları": [
+      "filetype:config inurl:config site:{{target}}",
+      "filetype:ini inurl:wp-config.php site:{{target}}",
+      "filetype:json inurl:credentials site:{{target}}"
+    ],
+    "Yedek (Backup) Dosyaları": [
+      "filetype:bak inurl:backup site:{{target}}",
+      "filetype:zip inurl:backup site:{{target}}",
+      "filetype:tgz inurl:backup site:{{target}}"
+    ]
+  }
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorker</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+        h2 { color: #58a6ff; text-align: center; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { font-size: 14px; font-weight: bold; color: #8b949e; }
+        
+        input, select, button.main-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            background-color: #161b22;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 15px;
+        }
+        input:focus, select:focus {
+            border-color: #58a6ff;
+            outline: none;
+        }
+        
+        button.main-btn {
+            background-color: #238636;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        button.main-btn:hover { filter: brightness(1.2); }
+
+        /* --- YENİ: Küçük Sıfırlama Butonu Tasarımı --- */
+        .reset-btn {
+            background-color: #da3633;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+            margin-top: 10px;
+            padding: 0 20px; /* Genişliği içeriğe göre ayarlar */
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        .reset-btn:hover { filter: brightness(1.2); }
+
+        /* Kart Tasarımı */
+        .card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        #resultsArea { margin-top: 25px; }
+        details.category-group {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+        
+        summary {
+            font-size: 16px;
+            font-weight: bold;
+            color: #58a6ff;
+            cursor: pointer;
+            padding: 5px;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        summary::-webkit-details-marker { display: none; }
+        
+        summary::before {
+            content: "▶";
+            margin-right: 10px;
+            font-size: 12px;
+            color: #8b949e;
+            transition: transform 0.2s;
+        }
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .dork-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #010409;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #238636;
+        }
+        .dork-text {
+            color: #3fb950;
+            word-break: break-all;
+            user-select: all;
+            flex-grow: 1;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+        .search-btn {
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .search-btn:hover { filter: brightness(1.2); }
+    </style>
+</head>
+<body>
+    <div class="tab-menu" style="display: flex; width: 100%; background-color: #161b22; border-bottom: 1px solid #30363d; margin-bottom: 20px;">
+        <button class="tab-btn active" id="btn-generator" onclick="sekmeDegistir('generator')" style="flex: 1; padding: 15px; background: none; border: none; color: #58a6ff; font-weight: bold; cursor: pointer; border-bottom: 3px solid #58a6ff; font-size: 16px;"> Dork Generator</button>
+        <button class="tab-btn" id="btn-manager" onclick="sekmeDegistir('manager')" style="flex: 1; padding: 15px; background: none; border: none; color: #8b949e; font-weight: bold; cursor: pointer; border-bottom: 3px solid transparent; font-size: 16px;"> Dork Manager</button>
+    </div>
+
+    <div class="container">
+        
+        <div id="generatorView">
+            <h2>Dork Generator</h2>
+            <div class="form-group">
+                <label for="targetInput">Target:</label>
+                <input type="text" id="targetInput" placeholder="example.com or keyword">
+            </div>
+            <div class="form-group">
+                <label for="categorySelect">Option:</label>
+                <select id="categorySelect">
+                    <option value="Domain">Domain</option>
+                    <option value="Anahtar Kelime">Keyword</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="main-btn" onclick="uret()">Generate Dorks</button>
+                <button class="reset-btn" onclick="temizle()">Reset</button>
+            </div>
+            <div id="resultsArea"></div>
+        </div>
+
+        <div id="managerView" style="display: none;">
+            <h2>Database Manager</h2>
+            
+            <div class="card" style="border-color: #238636;">
+                <h3 style="color: #3fb950; margin-top: 0; margin-bottom: 15px;">+ Add New Dork</h3>
+                <div class="form-group">
+                    <label>Option:</label>
+                    <select id="newOption" onchange="updateCategoryDropdown()">
+                        <option value="Domain">Domain</option>
+                        <option value="Anahtar Kelime">Keyword</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    <select id="newCategorySelect"></select>
+                </div>
+                <div class="form-group">
+                    <label>Dork Template:</label>
+                    <input type="text" id="newDork" placeholder="e.g. site:{{target}} inurl:admin">
+                </div>
+                <button class="main-btn" style="background-color: #238636;" onclick="kaydet()">Save to Database</button>
+            </div>
+
+            <h3 style="color: #8b949e; margin-top: 30px; border-bottom: 1px solid #30363d; padding-bottom: 10px;">Current Database</h3>
+            <div id="allDorksArea">
+                </div>
+        </div>
+
+    </div>
+
+    <script src="/wailsjs/go/main/App.js"></script>
+    <script src="./src/main.js"></script>
+</body>
+</html>
