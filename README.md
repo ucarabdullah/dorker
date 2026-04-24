@@ -23,7 +23,7 @@ Projeyi yerel makinenizde çalıştırmak için sisteminizde Go ve Wails'in kuru
 
 1.  **Projeyi Klonlayın:**
     ```bash
-    git clone [https://github.com/ucarabdullah/dorker.git](https://github.com/ucarabdullah/dorker.git)
+    git clone https://github.com/ucarabdullah/dorker.git
     cd dorker
     ```
 
@@ -32,7 +32,7 @@ Projeyi yerel makinenizde çalıştırmak için sisteminizde Go ve Wails'in kuru
     go mod tidy
     ```
 
-3.  **Uygulamayı Geliştirme Modunda Çalıştırın:**
+3.  **Uygulamayı Çalıştırın:**
     ```bash
     wails dev
     ```
